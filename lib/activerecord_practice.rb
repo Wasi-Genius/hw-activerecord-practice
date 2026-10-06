@@ -18,16 +18,41 @@ class Customer < ApplicationRecord
   end
 
   #  NOTE: Every one of these can be solved entirely by ActiveRecord calls.
-  #  You should NOT need to call Ruby library functions for sorting, filtering, etc.
+  # You should NOT need to call Ruby library functions for sorting, filtering, etc.
 
   def self.any_candice
-    # YOUR CODE HERE to return all customer(s) whose first name is Candice
-    # probably something like:  Customer.where(....)
-    Customer.where(first: 'Candice')
+    where(first: 'Candice')
   end
 
   def self.with_valid_email
-    # YOUR CODE HERE to return only customers with valid email addresses (containing '@')
+    where("email LIKE ?", "%@%")
   end
-  # etc. - see README.md for more details
+
+  def self.with_dot_org_email
+    where("email LIKE ?", "%.org")
+  end
+
+  def self.with_invalid_email
+    where("email IS NOT NULL AND email != '' AND email NOT LIKE ?", "%@%")
+  end
+
+  def self.with_blank_email
+    where(email: [nil, ''])
+  end
+
+  def self.born_before_1980
+    where("birthdate < ?", Time.zone.parse("1 January 1980"))
+  end
+
+  def self.with_valid_email_and_born_before_1980
+    with_valid_email.where("birthdate < ?", Time.zone.parse("1 January 1980"))
+  end
+
+  def self.last_names_starting_with_b
+    where("last LIKE ?", "B%").order(:birthdate)
+  end
+
+  def self.twenty_youngest
+    order(birthdate: :desc).limit(20)
+  end
 end
