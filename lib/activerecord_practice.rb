@@ -55,4 +55,22 @@ class Customer < ApplicationRecord
   def self.twenty_youngest
     order(birthdate: :desc).limit(20)
   end
+
+  def self.update_gussie_murray_birthdate
+    where(first: 'Gussie', last: 'Murray').update_all(
+      birthdate: Time.zone.parse('8 February 2004')
+    )
+  end
+
+  def self.change_all_invalid_emails_to_blank
+    with_invalid_email.update_all(email: '')
+  end
+
+  def self.delete_meggie_herman
+    where(first: 'Meggie', last: 'Herman').delete_all
+  end
+
+  def self.delete_everyone_born_before_1978
+    where('birthdate < ?', Time.zone.parse('1 January 1978')).delete_all
+  end
 end

@@ -84,24 +84,25 @@ describe 'ActiveRecord practice' do
       expect(Customer).not_to receive(:find)
     end
 
-    xspecify 'the birthdate of Gussie Murray to February 8,2004 (HINT: lookup `Time.parse`)' do
+    specify 'the birthdate of Gussie Murray to February 8,2004 (HINT: lookup `Time.parse`)' do
       Customer.update_gussie_murray_birthdate
       expect(Customer.find_by(first: 'Gussie').birthdate.to_date).to eq(Date.new(2004, 2, 8))
     end
 
-    xspecify 'all invalid emails to be blank' do
+    specify 'all invalid emails to be blank' do
       Customer.change_all_invalid_emails_to_blank
       expect(Customer.where("email != '' AND email IS NOT NULL and email NOT LIKE '%@%'").count).to be_zero
     end
 
-    xspecify 'database by deleting customer Meggie Herman' do
+    specify 'database by deleting customer Meggie Herman' do
       Customer.delete_meggie_herman
       expect(Customer.find_by(first: 'Meggie', last: 'Herman')).to be_nil
     end
 
-    xspecify 'database by deleting all customers born on or before 31 Dec 1977' do
+    specify 'database by deleting all customers born on or before 31 Dec 1977' do
       Customer.delete_everyone_born_before_1978
       expect(Customer.where('birthdate < ?', Time.zone.parse("1 January 1978"))).to be_empty
     end
+    
   end
 end
